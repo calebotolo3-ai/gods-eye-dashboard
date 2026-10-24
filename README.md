@@ -85,3 +85,7 @@ The dashboard now adds a dedicated intelligence API and panels for:
 The key is read only by the server-side API. Do not add it to browser code or commit it to GitHub. Traffic samples are limited to the named Nairobi road points in `server/intelligence.ts`; add more validated road points only after checking provider coverage. Weather and GDACS feeds are independently available and do not require the TomTom key.
 
 All feeds are informational and may be delayed, incomplete or unavailable. This dashboard is not an emergency service or a substitute for official traffic, weather or public-safety instructions.
+
+### Global traffic sampling update
+
+The Phase 6 traffic service samples 18 named road points across Nairobi, London, New York, Singapore, São Paulo, Tokyo, Sydney and Dubai through TomTom Traffic Flow. The dashboard refreshes this snapshot every two minutes and displays observed speeds, free-flow speeds, congestion bands, provider confidence and road-closure flags where returned. This is a representative set of monitored corridors, not live coverage of every road or every country. Some samples may be unavailable due to provider coverage, quota or connectivity. The weather panel remains Nairobi-focused. GDACS alerts are hazard/disaster reports and must not be interpreted as a comprehensive road-accident feed.
