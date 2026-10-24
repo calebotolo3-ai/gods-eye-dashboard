@@ -2,6 +2,7 @@ import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { getPublicSignals } from './server/publicSignals'
 import { getAnalytics } from './server/analytics'
+import { getIntelligence } from './server/intelligence'
 import { allowSummaryRequest } from './server/rateLimit'
 import { createAiSummary, SummaryConfigurationError, SummaryProviderError, validateSummaryInput } from './server/summarize'
 
@@ -16,6 +17,19 @@ function localApiPlugin(): Plugin {
   return {
     name: 'gods-eye-local-api',
     configureServer(server) {
+      server.middlewares.use('/api/intelligence', (request, response) => {
+        if (request.method !== 'GET') {
+          response.setHeader('Allow', 'GET')
+          sendJson(response, 405, { error: 'Method not allowed' })
+          return
+        }
+        response.setHeader('Cache-Control', 'no-store')
+        void getIntelligence().then(
+          (payload) => sendJson(response, 200, payload),
+          () => sendJson(response, 502, { error: 'Intelligence sources could not be reached.' })
+        )
+      })
+
       server.middlewares.use('/api/analytics', (request, response) => {
         if (request.method !== 'GET') {
           response.setHeader('Allow', 'GET')
@@ -31,7 +45,7 @@ function localApiPlugin(): Plugin {
         )
       })
 
-      server.middlewares.use('/api/signals', (request, response, next) => {
+      server.middlewares.use('/api/signals', (request, response) => {
         if (request.method !== 'GET') {
           response.setHeader('Allow', 'GET')
           sendJson(response, 405, { error: 'Method not allowed' })
@@ -44,7 +58,7 @@ function localApiPlugin(): Plugin {
         )
       })
 
-      server.middlewares.use('/api/summarize', (request, response, next) => {
+      server.middlewares.use('/api/summarize', (request, response) => {
         if (request.method !== 'POST') {
           response.setHeader('Allow', 'POST')
           sendJson(response, 405, { error: 'Method not allowed' })
@@ -101,8 +115,9 @@ function localApiPlugin(): Plugin {
 }
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), 'GEMINI_')
-  if (!process.env.GEMINI_API_KEY && env.GEMINI_API_KEY) process.env.GEMINI_API_KEY = env.GEMINI_API_KEY
-  if (!process.env.GEMINI_MODEL && env.GEMINI_MODEL) process.env.GEMINI_MODEL = env.GEMINI_MODEL
+  const env = loadEnv(mode, process.cwd(), '')
+  for (const key of ['GEMINI_API_KEY', 'GEMINI_MODEL', 'TOMTOM_API_KEY']) {
+    if (!process.env[key] && env[key]) process.env[key] = env[key]
+  }
   return { plugins: [react(), localApiPlugin()] }
 })
