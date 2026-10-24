@@ -7,11 +7,13 @@ A privacy-first, public-data situational-awareness dashboard. Phase 3 connects a
 - React + TypeScript + Vite responsive black-and-gold interface
 - Interactive OpenStreetMap basemap with source attribution and map layer toggles
 - USGS GeoJSON earthquake feed for the past 24 hours
+- Rolling 7-day and 30-day source-attributed analytics from USGS monthly and NASA EONET open-event feeds
+- Daily activity chart, source health indicators, and top-category counts
 - NASA EONET open natural-event records for the past 14 days
 - Source status, retrieval timestamp, original-source links, search, and category filters
 - Public record markers for items with point coordinates
 - Optional Gemini summaries generated server-side
-- Explicit labels separating source reports, AI summaries, and illustrative chart data
+- Explicit labels separating source reports and AI summaries from the limitations of rolling analytics snapshots
 
 ## Run locally
 
@@ -47,7 +49,7 @@ The summary endpoint validates the source and record fields, bounds input/output
 
 ## Data privacy
 
-The dashboard works with public natural-event records only. It does not track individuals or infer identities. AI summaries are labelled as generated text and are not independent verification or emergency guidance. The activity trend chart remains clearly labelled as illustrative sample data until a historical series is implemented.
+The dashboard works with public natural-event records only. It does not track individuals or infer identities. AI summaries are labelled as generated text and are not independent verification or emergency guidance. The analytics view aggregates the currently available USGS monthly feed and NASA EONET open-event records. It is a rolling source snapshot, not a complete historical archive; upstream coverage, date semantics, and availability vary.
 
 Store secrets only as server-side environment variables or hosting secrets. Never commit credentials.
 
@@ -56,5 +58,9 @@ Store secrets only as server-side environment variables or hosting secrets. Neve
 1. **Foundation:** dashboard UI and application scaffold.
 2. **Geospatial:** interactive OpenStreetMap map and attributed public geographic context.
 3. **Intelligence (current):** USGS + NASA EONET feeds and optional Gemini summaries.
-4. **Analytics:** connect historical panels to real, source-attributed data series.
-5. **Release:** automated build checks, security review, and deployment.
+4. **Analytics (implemented):** rolling 7-day and 30-day trends, source status, and category counts using attributed public feeds.
+5. **Release hardening (implemented):** browser security headers, least-privilege CI permissions, scheduled CodeQL analysis, and a security/release checklist.
+
+## Release notes
+
+Phase 4 analytics are served by `/api/analytics?days=7` or `/api/analytics?days=30`. The endpoint is read-only and cacheable in production. Phase 5 adds baseline response headers through `vercel.json`, CodeQL scanning, and a practical release checklist in `SECURITY.md`. A successful build and security scan do not replace a deployment review or external penetration test.
