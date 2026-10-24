@@ -23,7 +23,7 @@ export default function InteractiveMap() {
         <span className="map-source"><i /> PUBLIC BASEMAP</span>
         <span><MapPin size={12} /> SAMPLE REFERENCE POINTS</span>
       </div>
-      <div className="interactive-map">
+      <div className="interactive-map" role="region" aria-label="Interactive OpenStreetMap world map">
         <MapContainer
           center={[18, 0]}
           zoom={2}
@@ -33,7 +33,6 @@ export default function InteractiveMap() {
           scrollWheelZoom
           zoomControl={false}
           preferCanvas
-          aria-label="Interactive OpenStreetMap world map"
           style={{ height: '100%', width: '100%' }}
         >
           <LayersControl position="topright">
