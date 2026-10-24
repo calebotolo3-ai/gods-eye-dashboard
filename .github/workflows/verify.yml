@@ -1,0 +1,25 @@
+name: Verify dashboard
+
+on:
+  push:
+    branches:
+      - main
+      - phase-1/dashboard-foundation
+      - phase-2/interactive-map
+      - phase-3/public-feeds-ai
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Run TypeScript and production build
+        run: npm run build
