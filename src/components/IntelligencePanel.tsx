@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Activity, CloudSun, Download, ExternalLink, RefreshCw, ShieldAlert, TrafficCone, Wind } from 'lucide-react'
+import { CircleMarker, MapContainer, Popup, TileLayer } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
 
 type TrafficSample = { id:string; road:string; area:string; latitude:number; longitude:number; currentSpeed:number; freeFlowSpeed:number; delayRatio:number; confidence:number; roadClosure:boolean; status:'free'|'moderate'|'heavy'|'closed'; checkedAt:string; source:string }
 type Weather = { temperature:number; feelsLike:number; humidity:number; precipitation:number; windSpeed:number; weatherCode:number; isDay:boolean; checkedAt:string }
@@ -36,6 +38,7 @@ export default function IntelligencePanel() {
         <div className="traffic-summary"><strong>{data?.traffic.samples.length??'—'}</strong><span>road segments sampled</span><strong>{congestion}</strong><span>heavy / closed</span></div>
         {data?.traffic.status==='setup_required'&&<div className="intelligence-notice">Live traffic is ready to connect. Add the server-side <code>TOMTOM_API_KEY</code> in Vercel → Project Settings → Environment Variables, then redeploy. <a href="https://developer.tomtom.com/" target="_blank" rel="noreferrer">TomTom developer portal <ExternalLink size={11}/></a></div>}
         {data?.traffic.status==='unavailable'&&<div className="intelligence-notice warning">{data.traffic.message}</div>}
+        {data?.traffic.samples.length ? <div className="traffic-map"><MapContainer center={[-1.2864,36.8172]} zoom={11} scrollWheelZoom={false} style={{height:'235px',width:'100%'}}><TileLayer attribution='&copy; OpenStreetMap contributors' url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"/><>{data.traffic.samples.map(item=><CircleMarker key={item.id} center={[item.latitude,item.longitude]} radius={9} pathOptions={{color:item.status==='heavy'||item.status==='closed'?'#e58e7c':item.status==='moderate'?'#e0bd6c':'#79c49a',fillOpacity:.85,weight:2}}><Popup><b>{item.road}</b><br/>{Math.round(item.currentSpeed)} km/h · {speedStatus(item.status)}<br/>Free-flow: {Math.round(item.freeFlowSpeed)} km/h<br/>Source: TomTom Traffic Flow</Popup></CircleMarker>)}</>}</MapContainer></div>:null}
         <div className="traffic-list">{(data?.traffic.samples||[]).map(item=><div className="traffic-row" key={item.id}><div><b>{item.road}</b><span>{item.area}</span></div><div className="traffic-speed"><strong>{Math.round(item.currentSpeed)}</strong><small>km/h</small></div><span className={'traffic-state '+item.status}>{speedStatus(item.status)}</span><div className="traffic-meter"><i style={{width:Math.max(3,Math.min(100,(item.currentSpeed/Math.max(item.freeFlowSpeed,1))*100))+'%'}}/></div></div>)}</div>
         <div className="intel-foot">{data?.traffic.message||'Waiting for traffic provider…'} {data?.traffic.status==='live'?'Source: TomTom Traffic Flow.':''}</div>
       </article>
