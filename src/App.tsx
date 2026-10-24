@@ -3,6 +3,7 @@ import { Activity, Bell, ChevronDown, Clock3, Crosshair, ExternalLink, Globe2, L
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import InteractiveMap, { type MapSignal } from './components/InteractiveMap'
 import AnalyticsPanel from './components/AnalyticsPanel'
+import IntelligencePanel from './components/IntelligencePanel'
 
 type SignalItem = MapSignal
 type SourceStatus = { id: 'USGS' | 'NASA EONET'; label: string; status: 'online' | 'offline'; count: number; checkedAt: string; note?: string }
@@ -135,6 +136,7 @@ function App() {
         </section>
 
         <AnalyticsPanel />
+        <IntelligencePanel />
 
         <section className="content-grid">
           <article className="panel"><div className="panel-head"><div><div className="panel-kicker">INTERACTIVE GEOSPATIAL VIEW</div><h2>Public event locations</h2></div><span className="map-live-tag"><i /> SOURCE-REPORTED POINTS</span></div><InteractiveMap events={events} /><div className="map-footer"><span><i /> Public records with usable coordinates</span><span>OPENSTREETMAP BASEMAP</span></div></article>
