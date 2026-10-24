@@ -161,3 +161,12 @@
 .intelligence-disclaimer svg{color:#d2b365;flex-shrink:0}
 @media(max-width:900px){.intelligence-grid{grid-template-columns:1fr}}
 @media(max-width:700px){.intelligence-heading{align-items:flex-start;gap:12px;flex-direction:column}.intelligence-actions{width:100%;justify-content:flex-start}.traffic-row{grid-template-columns:minmax(90px,1fr) 52px 52px}.forecast-list{grid-template-columns:repeat(5,minmax(0,1fr))}.alert-row{gap:7px}}
+
+.traffic-map{height:235px;margin:10px 0;border:1px solid #29343d;border-radius:6px;overflow:hidden}
+.traffic-map .leaflet-container{background:#101820;color:#dce3e7;font-family:'Manrope',sans-serif}
+.traffic-map .leaflet-tile-pane{filter:invert(100%) hue-rotate(180deg) brightness(.88) contrast(.88) saturate(.68)}
+.traffic-map .leaflet-control-attribution{background:rgba(8,12,17,.9)!important;color:#ccd5db!important;font-size:8px!important}
+.traffic-map .leaflet-control-attribution a{color:#e1bc69!important}
+.traffic-map .leaflet-popup-content-wrapper,.traffic-map .leaflet-popup-tip{background:#0e141b;color:#e9edf0;border:1px solid #36434d}
+.traffic-map .leaflet-popup-content{font-size:10px;line-height:1.7}
+@media(max-width:700px){.traffic-map{height:215px}}
