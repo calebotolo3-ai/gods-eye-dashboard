@@ -41,7 +41,7 @@ The map uses OpenStreetMap standard tiles with visible attribution. Tiles are re
 
 AI summaries use Gemini from a server-side endpoint. The API key is never required in or embedded into browser code.
 
-For local development, copy `.env.example` to `.env.local` and set `GEMINI_API_KEY`. `GEMINI_MODEL` is optional and defaults to `gemini-2.5-flash`. In production on Vercel, configure those values in the project's server-side Environment Variables settings and redeploy. Never commit `.env.local`, expose the key in a `VITE_*` variable, or paste keys into source files. Without a configured key, public feeds still work and summary requests show an explicit setup message.
+For local development, copy `.env.example` to `.env.local` and set `GEMINI_API_KEY`. `GEMINI_MODEL` is optional and defaults to `gemini-3.5-flash-lite`. In production on Vercel, configure those values in the project's server-side Environment Variables settings and redeploy. Never commit `.env.local`, expose the key in a `VITE_*` variable, or paste keys into source files. Without a configured key, public feeds still work and summary requests show an explicit setup message.
 
 The summary endpoint validates the source and record fields, bounds input/output size, and applies a basic per-process request limiter. Serverless memory is not a shared/global rate limiter; use platform-level rate limits and provider quota/budget controls before making the service public.
 

@@ -37,7 +37,7 @@ export function validateSummaryInput(value: unknown): SummaryInput | null {
 export async function createAiSummary(signal: SummaryInput): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) throw new SummaryConfigurationError('AI summaries are not configured yet. Add GEMINI_API_KEY as a server-side environment variable; never put it in frontend code.')
-  const model = (process.env.GEMINI_MODEL || 'gemini-2.5-flash').replace(/^models\//, '')
+  const model = (process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite').replace(/^models\//, '')
   if (!/^[a-zA-Z0-9._-]{2,80}$/.test(model)) throw new SummaryConfigurationError('GEMINI_MODEL is invalid.')
 
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`
