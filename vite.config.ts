@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { getPublicSignals } from './server/publicSignals'
+import { getAnalytics } from './server/analytics'
 import { allowSummaryRequest } from './server/rateLimit'
 import { createAiSummary, SummaryConfigurationError, SummaryProviderError, validateSummaryInput } from './server/summarize'
 
@@ -15,6 +16,21 @@ function localApiPlugin(): Plugin {
   return {
     name: 'gods-eye-local-api',
     configureServer(server) {
+      server.middlewares.use('/api/analytics', (request, response) => {
+        if (request.method !== 'GET') {
+          response.setHeader('Allow', 'GET')
+          sendJson(response, 405, { error: 'Method not allowed' })
+          return
+        }
+        const requested = Number(new URL(request.url || '/', 'http://localhost').searchParams.get('days') || 30)
+        const days: 7 | 30 = requested === 7 ? 7 : 30
+        response.setHeader('Cache-Control', 'no-store')
+        void getAnalytics(days).then(
+          (payload) => sendJson(response, 200, payload),
+          () => sendJson(response, 502, { error: 'Analytics sources could not be reached. Try again later.' })
+        )
+      })
+
       server.middlewares.use('/api/signals', (request, response, next) => {
         if (request.method !== 'GET') {
           response.setHeader('Allow', 'GET')
