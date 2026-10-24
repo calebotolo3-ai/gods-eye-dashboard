@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Activity, Bell, ChevronDown, Clock3, Crosshair, ExternalLink, Globe2, Layers3, Menu, MoreHorizontal, Radio, RefreshCw, Search, ShieldCheck, Signal, SlidersHorizontal, Sparkles, Wifi, X } from 'lucide-react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import InteractiveMap, { type MapSignal } from './components/InteractiveMap'
+import AnalyticsPanel from './components/AnalyticsPanel'
 
 type SignalItem = MapSignal
 type SourceStatus = { id: 'USGS' | 'NASA EONET'; label: string; status: 'online' | 'offline'; count: number; checkedAt: string; note?: string }
@@ -118,7 +119,7 @@ function App() {
 
     <main className="main-content">
       <header className="topbar"><div className="topbar-left"><button className="mobile-menu icon-button" onClick={() => setMenu(true)} aria-label="Open menu"><Menu /></button><div className="breadcrumb">Workspace <span>/</span> <b>{nav}</b></div></div>
-        <div className="topbar-actions"><div className={`system-status ${onlineSources ? 'connected' : 'disconnected'}`}><i />{feedStatus}<span className="status-divider" />PHASE 3</div><button className="icon-button notification" aria-label="Notifications"><Bell size={18} /></button><div className="avatar small">GE</div></div>
+        <div className="topbar-actions"><div className={`system-status ${onlineSources ? 'connected' : 'disconnected'}`}><i />{feedStatus}<span className="status-divider" />PHASE 4–5</div><button className="icon-button notification" aria-label="Notifications"><Bell size={18} /></button><div className="avatar small">GE</div></div>
       </header>
 
       <div className="page-wrap">
@@ -133,10 +134,11 @@ function App() {
           <article className="metric-card"><div className="metric-top">EVENT CATEGORIES<span><Globe2 size={16} /></span></div><div className="metric-value">{String(eventTypeCount).padStart(2, '0')} <small>OBSERVED</small></div><div className="metric-foot">Categories represented in retrieved records</div></article>
         </section>
 
+        <AnalyticsPanel />
+
         <section className="content-grid">
           <article className="panel"><div className="panel-head"><div><div className="panel-kicker">INTERACTIVE GEOSPATIAL VIEW</div><h2>Public event locations</h2></div><span className="map-live-tag"><i /> SOURCE-REPORTED POINTS</span></div><InteractiveMap events={events} /><div className="map-footer"><span><i /> Public records with usable coordinates</span><span>OPENSTREETMAP BASEMAP</span></div></article>
-          <article className="panel activity-panel"><div className="panel-head"><div><div className="panel-kicker">ANALYTICS PREVIEW</div><h2>Activity trend</h2></div><span className="subtle-note">SAMPLE ONLY</span></div><div className="chart-summary"><strong>—</strong><span>Historical series not connected</span></div><div className="chart-wrap"><ResponsiveContainer width="100%" height="100%"><AreaChart data={trend} margin={{ top: 8, right: 4, left: -24, bottom: 0 }}><defs><linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#d8ae5a" stopOpacity=".28" /><stop offset="95%" stopColor="#d8ae5a" stopOpacity="0" /></linearGradient></defs><CartesianGrid stroke="#fff" strokeOpacity=".07" vertical={false} /><XAxis dataKey="t" tick={{ fill: '#71808a', fontSize: 10 }} axisLine={false} tickLine={false} /><YAxis tick={{ fill: '#71808a', fontSize: 10 }} axisLine={false} tickLine={false} /><Tooltip contentStyle={{ background: '#111922', border: '1px solid #38424a', borderRadius: 8, fontSize: 12 }} /><Area type="monotone" dataKey="v" stroke="#d8ae5a" strokeWidth={2} fill="url(#fill)" /></AreaChart></ResponsiveContainer></div><div className="chart-note"><i /> Displayed chart values are illustrative, not measurements from these feeds.</div></article>
-        </section>
+          </section>
 
         <section className="panel feed-panel">
           <div className="feed-head"><div><div className="panel-kicker">ATTRIBUTED PUBLIC INFORMATION</div><h2>Recent source records <span className="count-pill">{visible.length}</span></h2></div><div className="feed-tools"><div className="search-box"><Search size={14} /><input aria-label="Search source records" placeholder="Search records…" value={query} onChange={(event) => setQuery(event.target.value)} />{query && <button onClick={() => setQuery('')} aria-label="Clear search"><X size={13} /></button>}</div><button className="icon-button filter-button" aria-label="Search filters"><SlidersHorizontal size={16} /></button></div></div>
@@ -163,7 +165,7 @@ function App() {
           <div className="feed-disclaimer"><ShieldCheck size={14} /> Source records may change upstream. This dashboard does not independently verify reports or classify them as emergencies. AI summaries require a server-side Gemini configuration.</div>
         </section>
 
-        <footer className="page-footer"><span>GOD'S EYE <i /> PHASE 3 · PUBLIC FEEDS + AI</span><span>ATTRIBUTION · SOURCE LINKS · PRIVACY FIRST</span></footer>
+        <footer className="page-footer"><span>GOD'S EYE <i /> PHASE 4–5 · ANALYTICS + RELEASE</span><span>ATTRIBUTION · SOURCE LINKS · PRIVACY FIRST</span></footer>
       </div>
     </main>
   </div>
