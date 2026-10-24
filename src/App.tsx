@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Activity, Bell, ChevronDown, Clock3, Crosshair, ExternalLink, Globe2, Layers3, Menu, MoreHorizontal, Radio, RefreshCw, Search, ShieldCheck, Signal, SlidersHorizontal, Sparkles, Wifi, X } from 'lucide-react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import InteractiveMap, { type MapSignal } from './components/InteractiveMap'
+import AnalyticsPanel from './components/AnalyticsPanel'
 
 type SignalItem = MapSignal
 type SourceStatus = { id: 'USGS' | 'NASA EONET'; label: string; status: 'online' | 'offline'; count: number; checkedAt: string; note?: string }
@@ -118,7 +119,7 @@ function App() {
 
     <main className="main-content">
       <header className="topbar"><div className="topbar-left"><button className="mobile-menu icon-button" onClick={() => setMenu(true)} aria-label="Open menu"><Menu /></button><div className="breadcrumb">Workspace <span>/</span> <b>{nav}</b></div></div>
-        <div className="topbar-actions"><div className={`system-status ${onlineSources ? 'connected' : 'disconnected'}`}><i />{feedStatus}<span className="status-divider" />PHASE 3</div><button className="icon-button notification" aria-label="Notifications"><Bell size={18} /></button><div className="avatar small">GE</div></div>
+        <div className="topbar-actions"><div className={`system-status ${onlineSources ? 'connected' : 'disconnected'}`}><i />{feedStatus}<span className="status-divider" />PHASE 4–5</div><button className="icon-button notification" aria-label="Notifications"><Bell size={18} /></button><div className="avatar small">GE</div></div>
       </header>
 
       <div className="page-wrap">
@@ -132,6 +133,8 @@ function App() {
           <article className="metric-card"><div className="metric-top">EARTHQUAKE REPORTS<span><Activity size={16} /></span></div><div className="metric-value">{String(earthquakeCount).padStart(2, '0')} <small>USGS</small></div><div className="metric-foot">Past-24-hour public feed</div></article>
           <article className="metric-card"><div className="metric-top">EVENT CATEGORIES<span><Globe2 size={16} /></span></div><div className="metric-value">{String(eventTypeCount).padStart(2, '0')} <small>OBSERVED</small></div><div className="metric-foot">Categories represented in retrieved records</div></article>
         </section>
+
+        <AnalyticsPanel />
 
         <section className="content-grid">
           <article className="panel"><div className="panel-head"><div><div className="panel-kicker">INTERACTIVE GEOSPATIAL VIEW</div><h2>Public event locations</h2></div><span className="map-live-tag"><i /> SOURCE-REPORTED POINTS</span></div><InteractiveMap events={events} /><div className="map-footer"><span><i /> Public records with usable coordinates</span><span>OPENSTREETMAP BASEMAP</span></div></article>
@@ -163,7 +166,7 @@ function App() {
           <div className="feed-disclaimer"><ShieldCheck size={14} /> Source records may change upstream. This dashboard does not independently verify reports or classify them as emergencies. AI summaries require a server-side Gemini configuration.</div>
         </section>
 
-        <footer className="page-footer"><span>GOD'S EYE <i /> PHASE 3 · PUBLIC FEEDS + AI</span><span>ATTRIBUTION · SOURCE LINKS · PRIVACY FIRST</span></footer>
+        <footer className="page-footer"><span>GOD'S EYE <i /> PHASE 4–5 · ANALYTICS + RELEASE</span><span>ATTRIBUTION · SOURCE LINKS · PRIVACY FIRST</span></footer>
       </div>
     </main>
   </div>
