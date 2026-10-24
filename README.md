@@ -64,3 +64,24 @@ Store secrets only as server-side environment variables or hosting secrets. Neve
 ## Release notes
 
 Phase 4 analytics are served by `/api/analytics?days=7` or `/api/analytics?days=30`. The endpoint is read-only and cacheable in production. Phase 5 adds baseline response headers through `vercel.json`, CodeQL scanning, and a practical release checklist in `SECURITY.md`. A successful build and security scan do not replace a deployment review or external penetration test.
+
+
+## Phase 6 — live situational awareness
+
+The dashboard now adds a dedicated intelligence API and panels for:
+
+- **Road traffic:** sampled live road-segment speeds for selected Nairobi corridors through the TomTom Traffic Flow API. This is not a complete citywide traffic census. Configure `TOMTOM_API_KEY` as a server-side environment variable in Vercel to enable it. Without the key, the dashboard clearly shows setup-required status instead of invented traffic values.
+- **Weather:** current conditions and a five-day forecast for Nairobi from Open-Meteo.
+- **Global alerts:** red and orange public disaster alerts from GDACS, with source links.
+- **Reports:** export the currently loaded traffic, weather and alert snapshot as a CSV file.
+
+### Enable live road traffic on Vercel
+
+1. Create an API key in your TomTom developer account and check the provider's current plan, coverage, quota and terms.
+2. Open the Vercel project settings for `gods-eye-dashboard1`.
+3. Add `TOMTOM_API_KEY` under Environment Variables for Production (and Preview if needed).
+4. Redeploy the project.
+
+The key is read only by the server-side API. Do not add it to browser code or commit it to GitHub. Traffic samples are limited to the named Nairobi road points in `server/intelligence.ts`; add more validated road points only after checking provider coverage. Weather and GDACS feeds are independently available and do not require the TomTom key.
+
+All feeds are informational and may be delayed, incomplete or unavailable. This dashboard is not an emergency service or a substitute for official traffic, weather or public-safety instructions.
